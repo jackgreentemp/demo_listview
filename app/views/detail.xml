@@ -1,6 +1,6 @@
 <Alloy>
 	<!-- <Model src="myCollection"/> -->
-	<Window id="win" class="container" title="index" layout="vertical" model="$.model">
+	<Window id="win" class="container" title="index" layout="vertical">
 		<ActionBar platfor="android" displayHomeAsUp="true" onHomeIconItemSelected="closeWindow" />
 			<View class='v_0'>
 				<Label id="data_id" text="{id}"></Label>

@@ -19,7 +19,6 @@ function edit() {
 	obj.image = 'http://image.tianjimedia.com/uploadImages/2013/105/414UWER6711T.jpg';//修改image地址
 	// $.image.image = obj.image;//更新UI
 	$model.set(obj).save();//更新model并保存，自动刷新list.js的UI
-	// $model.fetch();
 }
 
 //销毁，避免内存溢出
@@ -27,6 +26,7 @@ $.win.addEventListener("close", function(){
     $.destroy();
 });
 
+//edit监听中修改$model，在$model的change监听中，更新UI
 $model.on('change', function(e){
     // custom function to update the content on the view
     Ti.API.info(e.toJSON());
