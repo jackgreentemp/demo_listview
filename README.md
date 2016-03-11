@@ -1,8 +1,10 @@
 
-# Titanium-ListView数据绑定、下拉刷新等常用功能的实现
+# Titanium-ListView双向数据绑定、下拉刷新等常用功能的实现
 - 在使用ListView时，使用Collections和Model可以便捷实现本地数据管理以及与服务器同步数据后的UI更新；
 - 下拉刷新也是在开发listview时常见的需求，实现了下拉刷新可以在当前页面直接请求新数据、保存至本地、更新UI；
 - Listview分页功能也是必需的，如果一次性将所有的数据加载到ListView中，在有较多图片资源时容易导致内存泄露；
+## 重要更新
+- 使用$model作为controller参数，实现双向数据绑定，详见list.js以及detail.js。
 
 ## 理清思路
 在controller的开发中，常见的代码逻辑为：
@@ -20,6 +22,7 @@
 + ListView 分页显示
 + ListView 绑定 Collection
 + ListView基于model自动更新
++ view与model之间的双向数据绑定
 
 ![list](https://github.com/jackgreentemp/practice/blob/master/list.gif)
 
@@ -30,64 +33,64 @@
   + 修改index.xml
   ``` xml
   <Alloy>
-	<Window id="win" class="container" platform="android">
-		<Button id="label" onClick="doClick">Home</Button>
-	</Window>
-	<NavigationWindow id="nav" platform="ios" class="container">
-		<Window id="win" class="container">
-			<Button id="label" onClick="doClick">Home</Button>
-		</Window>
-	</NavigationWindow>
+    <Window id="win" class="container" platform="android">
+        <Button id="label" onClick="doClick">Home</Button>
+    </Window>
+    <NavigationWindow id="nav" platform="ios" class="container">
+        <Window id="win" class="container">
+            <Button id="label" onClick="doClick">Home</Button>
+        </Window>
+    </NavigationWindow>
   </Alloy>
   ```
   + 修改index.js
   ```javascript
  
     Alloy.Globals.Navigator = {
-	
-    	open: function(controller, payload){
-    		var win = Alloy.createController(controller, payload || {}).getView();
-    		
-    		if(OS_IOS){
-    			$.nav.openWindow(win);
-    		}
-    		else if(OS_MOBILEWEB){
-    			$.nav.open(win);
-    		}
-    		else {
-    			
-    			// added this property to the payload to know if the window is a child
-    			if (payload.displayHomeAsUp){
-    				
-    				win.addEventListener('open',function(evt){
-    					var activity=win.activity;
-    					activity.actionBar.displayHomeAsUp=payload.displayHomeAsUp;
-    					activity.actionBar.onHomeIconItemSelected=function(){
-    						evt.source.close();
-    					};
-    				});
-    			}
-    			win.open();
-    		}
-    	}
+    
+        open: function(controller, payload){
+            var win = Alloy.createController(controller, payload || {}).getView();
+            
+            if(OS_IOS){
+                $.nav.openWindow(win);
+            }
+            else if(OS_MOBILEWEB){
+                $.nav.open(win);
+            }
+            else {
+                
+                // added this property to the payload to know if the window is a child
+                if (payload.displayHomeAsUp){
+                    
+                    win.addEventListener('open',function(evt){
+                        var activity=win.activity;
+                        activity.actionBar.displayHomeAsUp=payload.displayHomeAsUp;
+                        activity.actionBar.onHomeIconItemSelected=function(){
+                            evt.source.close();
+                        };
+                    });
+                }
+                win.open();
+            }
+        }
     };
     
     function doClick(e) {
        Alloy.Globals.Navigator.open("detail", {displayHomeAsUp:true});
     }
     if(OS_ANDROID) {
-    	$.win.open();
+        $.win.open();
     } else {
-    	$.nav.open();
+        $.nav.open();
     }
 
   ```
   + 创建detail.xml
   ``` xml
   <Alloy>
-	<Window id="win" class="container" title="index">
-		<ActionBar platfor="android" displayHomeAsUp="true" onHomeIconItemSelected="closeWindow" />
-	</Window>
+    <Window id="win" class="container" title="index">
+        <ActionBar platfor="android" displayHomeAsUp="true" onHomeIconItemSelected="closeWindow" />
+    </Window>
   </Alloy>
   ```
   + 创建detail.js
@@ -100,10 +103,10 @@
     + 修改index.xml，使用require方式引入list.js
   ``` xml
   <Alloy>
-	<Require id="index" src="list" platform="android" /> 
-	<NavigationWindow id="nav" platform="ios" class="container">
-		<Require src="list"/>
-	</NavigationWindow>
+    <Require id="index" src="list" platform="android" /> 
+    <NavigationWindow id="nav" platform="ios" class="container">
+        <Require src="list"/>
+    </NavigationWindow>
   </Alloy>
   ```    
     + 修改inde.js
@@ -112,32 +115,32 @@
      * Global Navigation Handler
      */
     Alloy.Globals.Navigator = {
-    	
-    	open: function(controller, payload){
-    		var win = Alloy.createController(controller, payload || {}).getView();
-    		
-    		if(OS_IOS){
-    			$.nav.openWindow(win);
-    		}
-    		else if(OS_MOBILEWEB){
-    			$.nav.open(win);
-    		}
-    		else {
-    			
-    			// added this property to the payload to know if the window is a child
-    			if (payload.displayHomeAsUp){
-    				
-    				win.addEventListener('open',function(evt){
-    					var activity=win.activity;
-    					activity.actionBar.displayHomeAsUp=payload.displayHomeAsUp;
-    					activity.actionBar.onHomeIconItemSelected=function(){
-    						evt.source.close();
-    					};
-    				});
-    			}
-    			win.open();
-    		}
-    	}
+        
+        open: function(controller, payload){
+            var win = Alloy.createController(controller, payload || {}).getView();
+            
+            if(OS_IOS){
+                $.nav.openWindow(win);
+            }
+            else if(OS_MOBILEWEB){
+                $.nav.open(win);
+            }
+            else {
+                
+                // added this property to the payload to know if the window is a child
+                if (payload.displayHomeAsUp){
+                    
+                    win.addEventListener('open',function(evt){
+                        var activity=win.activity;
+                        activity.actionBar.displayHomeAsUp=payload.displayHomeAsUp;
+                        activity.actionBar.onHomeIconItemSelected=function(){
+                            evt.source.close();
+                        };
+                    });
+                }
+                win.open();
+            }
+        }
     };
     
     function doClick(e) {
@@ -145,33 +148,33 @@
     }
     
     if(OS_ANDROID) {
-    	$.index.getView().open();
+        $.index.getView().open();
     } else {
-    	$.nav.open();
+        $.nav.open();
     }
     
   ```
     + 创建list.xml，标签方式实例化Collection，引入下拉刷新widget
   ``` xml
   <Alloy>
-	<Collection src="myCollection"/>
-	<Window id="win" class="container">
-		<Widget id="ptr" src="nl.fokkezb.pullToRefresh" onRelease="myRefresher">
-			<ListView id="list" defaultItemTemplate="defaultItem" onMarker="onMarkerEvent">
-				<Templates>
-					<ItemTemplate name="defaultItem" height="Titanium.UI.SIZE">
-						<View class='v_0'>
-							<Label bindId="testDate" class="testDate" />
-							<ImageView bindId="webView" class="w_1"></ImageView>
-						</View>
-					</ItemTemplate>
-				</Templates>
-				<ListSection id="section" dataCollection="myCollection" dataTransform="doTransform">
-					<ListItem class="item" dataid:text="{id}" testDate:text="{testDate}" webView:image="{image}"/>
-				</ListSection>
-			</ListView>
-		</Widget>
-	</Window>
+    <Collection src="myCollection"/>
+    <Window id="win" class="container">
+        <Widget id="ptr" src="nl.fokkezb.pullToRefresh" onRelease="myRefresher">
+            <ListView id="list" defaultItemTemplate="defaultItem" onMarker="onMarkerEvent">
+                <Templates>
+                    <ItemTemplate name="defaultItem" height="Titanium.UI.SIZE">
+                        <View class='v_0'>
+                            <Label bindId="testDate" class="testDate" />
+                            <ImageView bindId="webView" class="w_1"></ImageView>
+                        </View>
+                    </ItemTemplate>
+                </Templates>
+                <ListSection id="section" dataCollection="myCollection" dataTransform="doTransform">
+                    <ListItem class="item" dataid:text="{id}" testDate:text="{testDate}" webView:image="{image}"/>
+                </ListSection>
+            </ListView>
+        </Widget>
+    </Window>
   </Alloy>
   ```    
     + 创建list.js，这是本例的核心文件，由于没有服务器接口，所以使用本地创建样例数据，思路就是查本地数据，如果本地数据为空，则新建10条数据；注意ListView的更新都是依赖于Collection的变化；并且使用onMarkerEvent来进行分页显示，具体的方式参见代码；
@@ -184,63 +187,63 @@
     
     //listview滑动到底部，查询数据，更新listview
     function onMarkerEvent(e) {
-    	var oldLength = _.size(collection);
-    	Ti.API.info("oldLength = ", oldLength);
-    	collection.fetch({query: {statement: 'SELECT * from ' + table + ' where uid = ?' + ' ORDER BY testDate DESC limit 0, ' + (oldLength+10), params: [uid]}});
-    	var newLength = _.size(collection);
-    	Ti.API.info("newLength = ", newLength);
-    	
-    	if(newLength == oldLength){//sql中无新数据了
-    		addDatasToCollection();//TODO 使用网络请求获取新参数
-    	}
-    	
-    	//更新marker索引，如果是网络请求中的，需要在网络请求callback中更新marker索引
-    	$.list.setMarker({
-    		sectionIndex:0,
-    		itemIndex:$.list.sections[0].items.length - 1
-    	});
+        var oldLength = _.size(collection);
+        Ti.API.info("oldLength = ", oldLength);
+        collection.fetch({query: {statement: 'SELECT * from ' + table + ' where uid = ?' + ' ORDER BY testDate DESC limit 0, ' + (oldLength+10), params: [uid]}});
+        var newLength = _.size(collection);
+        Ti.API.info("newLength = ", newLength);
+        
+        if(newLength == oldLength){//sql中无新数据了
+            addDatasToCollection();//TODO 使用网络请求获取新参数
+        }
+        
+        //更新marker索引，如果是网络请求中的，需要在网络请求callback中更新marker索引
+        $.list.setMarker({
+            sectionIndex:0,
+            itemIndex:$.list.sections[0].items.length - 1
+        });
     }
     
     //整理template中的参数
     function doTransform(model){
-    	var obj = model.toJSON();
-    	obj.testDate = "id=" + obj.id + ", " + obj.testDate;
-    	return obj;
+        var obj = model.toJSON();
+        obj.testDate = "id=" + obj.id + ", " + obj.testDate;
+        return obj;
     }
     
     //为Collection新增数据
     function addDatasToCollection(){
-    	var i;
-    	for(i=1;i<=10;i++){
-    		var obj = {
-    			uid: 1,
-    		    testDate: ''+moment().format('YYYY-MM-DD HH:mm:ss'),
-    		    image: 'http://www.photography-match.com/views/images/gallery/Uluru_Kata_Tjuta_National_Park_Australia.jpg',
-    		};
-    		
-    		var model = Alloy.createModel('myCollection', obj);
-    		
-    		collection.add(model);
-    		
-    		model.save();
-    	}
+        var i;
+        for(i=1;i<=10;i++){
+            var obj = {
+                uid: 1,
+                testDate: ''+moment().format('YYYY-MM-DD HH:mm:ss'),
+                image: 'http://www.photography-match.com/views/images/gallery/Uluru_Kata_Tjuta_National_Park_Australia.jpg',
+            };
+            
+            var model = Alloy.createModel('myCollection', obj);
+            
+            collection.add(model);
+            
+            model.save();
+        }
     }
     
     //初始化
     function init(){
-    	//查询数据
-    	collection.fetch({query: { statement: 'SELECT * from ' + table + ' where uid = ?' + ' ORDER BY testDate DESC limit 0,10', params: [uid]}});
-    	
-    	//如果数据库无数据，新增一些数据
-    	if(_.size(collection) === 0){
-    		addDatasToCollection();
-    	}
-    	
-    	//更新marker索引
+        //查询数据
+        collection.fetch({query: { statement: 'SELECT * from ' + table + ' where uid = ?' + ' ORDER BY testDate DESC limit 0,10', params: [uid]}});
+        
+        //如果数据库无数据，新增一些数据
+        if(_.size(collection) === 0){
+            addDatasToCollection();
+        }
+        
+        //更新marker索引
         $.list.setMarker({
-    		sectionIndex:0,
-    		itemIndex:$.list.sections[0].items.length - 1
-    	});
+            sectionIndex:0,
+            itemIndex:$.list.sections[0].items.length - 1
+        });
     }
     
     //先open window，再执行初始化
@@ -255,27 +258,27 @@
     
     //下拉刷新执行的函数
     function myRefresher(e) {
-    	init();
-    	e.hide();
+        init();
+        e.hide();
     }
     
     /*
      * listView 点击监听 
      */
     $.list.addEventListener('itemclick', function(e){
-    	
-    	//取消 listView点击后选中状态
+        
+        //取消 listView点击后选中状态
         var item = e.section.getItemAt(e.itemIndex);
         e.section.updateItemAt(e.itemIndex, item);
         
-    	var dataid = e.section.items[e.itemIndex].dataid.text;//根据item索引查找dataid
+        var dataid = e.section.items[e.itemIndex].dataid.text;//根据item索引查找dataid
     
-    	var data = collection.get(dataid);//根据dataid获取数据模型
-    	
-    	// Ti.API.info("item data =", data);
-    	
-    	Alloy.Globals.Navigator.open("detail", {displayHomeAsUp:true, data: data});
-    		
+        var data = collection.get(dataid);//根据dataid获取数据模型
+        
+        // Ti.API.info("item data =", data);
+        
+        Alloy.Globals.Navigator.open("detail", {displayHomeAsUp:true, data: data});
+            
     });
 
   ```
@@ -283,16 +286,16 @@
     + 创建detail.xml
   ``` xml
   <Alloy>
-	<Collection src="myCollection"/>
-	<Window id="win" class="container" title="index" layout="vertical">
-		<ActionBar platfor="android" displayHomeAsUp="true" onHomeIconItemSelected="closeWindow" />
-			<View class='v_0'>
-				<Label id="data_id"></Label>
-				<Label class="testDate" id="testDate"/>
-				<ImageView class="w_1" id="image"></ImageView>
-			</View>
-			<Button id="btn_edit" onClick="edit" top="50">修改</Button>
-	</Window>
+    <Collection src="myCollection"/>
+    <Window id="win" class="container" title="index" layout="vertical">
+        <ActionBar platfor="android" displayHomeAsUp="true" onHomeIconItemSelected="closeWindow" />
+            <View class='v_0'>
+                <Label id="data_id"></Label>
+                <Label class="testDate" id="testDate"/>
+                <ImageView class="w_1" id="image"></ImageView>
+            </View>
+            <Button id="btn_edit" onClick="edit" top="50">修改</Button>
+    </Window>
   </Alloy>
   ```
     + 创建detail.js，接收list.js传递进来的model，并获取相应的数据赋值给UI，在“修改”按钮的监听中，修改model中image地址，保存model后，关闭detail.js，发现ListView的图片也自动更新了。
@@ -300,22 +303,22 @@
     var args = arguments[0] || {};
     
     function init() {
-    	Ti.API.info("args = ", args.data.toJSON());
-    	$.data_id.text = "id=" + args.data.toJSON().id;
-    	$.testDate.text = args.data.toJSON().testDate;
-    	$.image.image = args.data.toJSON().image;
+        Ti.API.info("args = ", args.data.toJSON());
+        $.data_id.text = "id=" + args.data.toJSON().id;
+        $.testDate.text = args.data.toJSON().testDate;
+        $.image.image = args.data.toJSON().image;
     }
     
     function closeWindow(){
-    	$.win.close();
+        $.win.close();
     }
     
     function edit() {
-    	var model = args.data;//获取model
-    	var obj = model.toJSON();//model转为object
-    	obj.image = 'http://image.tianjimedia.com/uploadImages/2013/105/414UWER6711T.jpg';//修改image地址
-    	$.image.image = obj.image;//更新UI
-    	model.set(obj).save();//更新model并保存，自动刷新list.js的UI
+        var model = args.data;//获取model
+        var obj = model.toJSON();//model转为object
+        obj.image = 'http://image.tianjimedia.com/uploadImages/2013/105/414UWER6711T.jpg';//修改image地址
+        $.image.image = obj.image;//更新UI
+        model.set(obj).save();//更新model并保存，自动刷新list.js的UI
     }
     
     init();    
@@ -324,34 +327,34 @@
   + 新建myCollection.js
   ``` javascript
     exports.definition = {
-    	config: {
-    		columns: {
-    			id: 'INTEGER PRIMARY KEY AUTOINCREMENT',
-    			uid: 'TEXT',
-    			testDate: 'TEXT',
-    			image: 'TEXT',
-    		},
-    		defaults: {
-    		},
-    		adapter: {
-    			type: 'sql',
-    			collection_name: 'myCollection',
-    			idAttribute: 'id'
-    		}
-    	},
+        config: {
+            columns: {
+                id: 'INTEGER PRIMARY KEY AUTOINCREMENT',
+                uid: 'TEXT',
+                testDate: 'TEXT',
+                image: 'TEXT',
+            },
+            defaults: {
+            },
+            adapter: {
+                type: 'sql',
+                collection_name: 'myCollection',
+                idAttribute: 'id'
+            }
+        },
     
-    	extendCollection : function(Collection) {
-    		_.extend(Collection.prototype, {
+        extendCollection : function(Collection) {
+            _.extend(Collection.prototype, {
     
-    			// For Backbone v1.1.2, uncomment this to override the fetch method
-    			/*
-    			fetch: function(options) {
-    				options = options ? _.clone(options) : {};
-    				options.reset = true;
-    				return Backbone.Collection.prototype.fetch.call(this, options);
-    			}
-    			*/
-    			initialize: function () {
+                // For Backbone v1.1.2, uncomment this to override the fetch method
+                /*
+                fetch: function(options) {
+                    options = options ? _.clone(options) : {};
+                    options.reset = true;
+                    return Backbone.Collection.prototype.fetch.call(this, options);
+                }
+                */
+                initialize: function () {
                     //*** Default sort field.  Replace with your own default.
                     this.sortField = "testDate";
                     //*** Default sort direction
@@ -390,10 +393,10 @@
                         return left.index < right.index ? -1 : 1;
                     }), 'value');
                 }
-    		});
+            });
     
-    		return Collection;
-    	}
+            return Collection;
+        }
     };
   
   ```
