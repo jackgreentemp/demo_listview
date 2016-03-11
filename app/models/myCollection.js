@@ -14,7 +14,18 @@ exports.definition = {
 			idAttribute: 'id'
 		}
 	},
-
+	
+	extendModel: function(Model) {
+		_.extend(Model.prototype, {
+			// transform : function transform() {
+				// var transformed = this.toJSON();
+				// transformed.artist = transformed.artist.toUpperCase();
+				// return transformed;
+			// }
+		});
+		return Model;
+	},
+	
 	extendCollection : function(Collection) {
 		_.extend(Collection.prototype, {
 

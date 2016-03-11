@@ -93,9 +93,9 @@ $.list.addEventListener('itemclick', function(e){
 	var dataid = e.section.items[e.itemIndex].dataid.text;//根据item索引查找dataid
 
 	var data = collection.get(dataid);//根据dataid获取数据模型
-	
+		
 	// Ti.API.info("item data =", data);
 	
-	Alloy.Globals.Navigator.open("detail", {displayHomeAsUp:true, data: data});
+	Alloy.Globals.Navigator.open("detail", {displayHomeAsUp:true, $model: data});
 		
 });

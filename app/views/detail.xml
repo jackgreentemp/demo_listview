@@ -1,11 +1,11 @@
 <Alloy>
-	<Collection src="myCollection"/>
-	<Window id="win" class="container" title="index" layout="vertical">
+	<!-- <Model src="myCollection"/> -->
+	<Window id="win" class="container" title="index" layout="vertical" model="$.model">
 		<ActionBar platfor="android" displayHomeAsUp="true" onHomeIconItemSelected="closeWindow" />
 			<View class='v_0'>
-				<Label id="data_id"></Label>
-				<Label class="testDate" id="testDate"/>
-				<ImageView class="w_1" id="image"></ImageView>
+				<Label id="data_id" text="{id}"></Label>
+				<Label class="testDate" id="testDate" text="{testDate}"/>
+				<ImageView class="w_1" id="image" image="{image}"></ImageView>
 			</View>
 			<Button id="btn_edit" onClick="edit" top="50">修改</Button>
 	</Window>
