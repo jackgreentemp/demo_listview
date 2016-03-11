@@ -96,6 +96,6 @@ $.list.addEventListener('itemclick', function(e){
 		
 	// Ti.API.info("item data =", data);
 	
-	Alloy.Globals.Navigator.open("detail", {displayHomeAsUp:true, $model: data});
+	Alloy.Globals.Navigator.open("detail", {displayHomeAsUp:true, $model: data});//$model是Alloy中controller初始化时会加载的model
 		
 });
