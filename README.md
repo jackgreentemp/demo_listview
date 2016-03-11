@@ -3,6 +3,7 @@
 - 在使用ListView时，使用Collections和Model可以便捷实现本地数据管理以及与服务器同步数据后的UI更新；
 - 下拉刷新也是在开发listview时常见的需求，实现了下拉刷新可以在当前页面直接请求新数据、保存至本地、更新UI；
 - Listview分页功能也是必需的，如果一次性将所有的数据加载到ListView中，在有较多图片资源时容易导致内存泄露；
+
 ## 重要更新
 - 使用$model作为controller参数，实现双向数据绑定，详见list.js以及detail.js。
 
