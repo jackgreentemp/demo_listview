@@ -1,0 +1,6 @@
+<Alloy>
+	<Require id="index" src="list" platform="android" /> 
+	<NavigationWindow id="nav" platform="ios" class="container">
+		<Require src="list"/>
+	</NavigationWindow>
+</Alloy>

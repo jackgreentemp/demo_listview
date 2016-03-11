@@ -1,0 +1,12 @@
+<Alloy>
+	<Collection src="myCollection"/>
+	<Window id="win" class="container" title="index" layout="vertical">
+		<ActionBar platfor="android" displayHomeAsUp="true" onHomeIconItemSelected="closeWindow" />
+			<View class='v_0'>
+				<Label id="data_id"></Label>
+				<Label class="testDate" id="testDate"/>
+				<ImageView class="w_1" id="image"></ImageView>
+			</View>
+			<Button id="btn_edit" onClick="edit" top="50">修改</Button>
+	</Window>
+</Alloy>

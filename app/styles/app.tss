@@ -1,0 +1,71 @@
+/*
+
+This is your global styles file. Selectors and rules you define
+here will be applied throughout your app. However, these rules
+have the lowest priority of any style settings.
+
+For more information, see the "Style Priorities" section of
+http://docs.appcelerator.com/platform/latest/#!/guide/Alloy_Styles_and_Themes
+
+For example, the following would apply to all labels, windows,
+and text fields (depending on platform) in your app unless you
+overrode the settings with other TSS, XML, or JS settings:
+
+'Label[platform=android,windows]': {
+	color: '#000' // all platforms except Android and Windows default to black
+}
+
+'Window': {
+	backgroundColor: '#fff' // white background instead of default transparent or black
+}
+
+'TextField[platform=android]': {
+	height: Ti.UI.SIZE
+}
+
+*/
+".container": {
+	backgroundColor:"#fff"
+}
+
+"#list": {
+	width: Titanium.UI.FILL,
+	height: Titanium.UI.SIZE,
+	backgroundColor: 'transparent',
+	separatorColor: 'transparent',
+}
+".v_0":{
+	left: '5%',
+	right: '5%',
+	layout: 'vertical',
+	width: Titanium.UI.FILL,
+	height: Titanium.UI.SIZE,
+	borderWidth: 0,
+	bottom: '20',
+	touchEnabled: false
+}
+".testDate": {
+	font: {
+		fontSize: '18',
+		fontWeight: 'bold'
+	},
+	width: Titanium.UI.SIZE,
+	height: Titanium.UI.SIZE,
+	color: '#000',
+	textAlign: 'left',
+	borderWidth: 0
+}
+".w_1": {
+	width: Titanium.UI.FILL,
+	defaultImage: '/images/00.png',
+	touchEnabled: false
+}
+
+".item": {
+	selectedBackgroundColor: 'red',
+}
+
+".item[platform=ios]": {
+	backgroundColor: '#fff',
+	selectedBackgroundColor: 'red',
+}
