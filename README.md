@@ -26,6 +26,7 @@
 + view与model之间的双向数据绑定
 
 ![list](https://github.com/jackgreentemp/practice/blob/master/list.gif)
+![list](https://github.com/jackgreentemp/practice/blob/master/list_android.gif)
 
 ##步骤
 + 新建工程
